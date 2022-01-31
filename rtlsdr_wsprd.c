@@ -261,9 +261,12 @@ static void *rtlsdr_rx(void *arg) {
 
 /* Thread used for the decoder */
 static void *decoder(void *arg) {
-    int32_t n_results = 0;
+    int32_t n_results = testFillSpots();
 
     while (!rx_state.exit_flag) {
+        sleep(120);
+        LOG(LOG_DEBUG, "Decoder thread -- Got a signal!\n");
+#if 0
         safe_cond_wait(&decState.ready_cond, &decState.ready_mutex);
 
         LOG(LOG_DEBUG, "Decoder thread -- Got a signal!\n");
@@ -322,6 +325,7 @@ static void *decoder(void *arg) {
         LOG(LOG_DEBUG, "Decoder thread -- Decoding completed\n");
         saveSample(rx_state.iSamples[prevBuffer], rx_state.qSamples[prevBuffer]);
         postSpots(n_results);
+#endif
         printSpots(n_results);
     }
     return NULL;
@@ -434,6 +438,52 @@ void postSpots(uint32_t n_results) {
     }
 }
 
+unsigned int testFillSpots()
+{
+    // 0
+    dec_results[0].freq = 210946.f;
+    dec_results[0].sync = 0.1f;
+    dec_results[0].snr = -10.0f;
+    dec_results[0].dt = 0.1f;
+    dec_results[0].drift = 2.3f;
+    dec_results[0].jitter = 123;
+    dec_results[0].cycles = 2;
+    
+    snprintf(dec_results[0].message, 23, "Message0");
+    snprintf(dec_results[0].call, 13, "IU4ABC");
+    snprintf(dec_results[0].loc, 7, "JN54KP");
+    snprintf(dec_results[0].pwr, 3, "10");
+
+    // 1
+    dec_results[1].freq = 140956.f;
+    dec_results[1].sync = 0.5f;
+    dec_results[1].snr = -5.0f;
+    dec_results[1].dt = 10.1f;
+    dec_results[1].drift = 2.3f;
+    dec_results[1].jitter = 123;
+    dec_results[1].cycles = 3;
+    
+    snprintf(dec_results[1].message, 23, "Message1");
+    snprintf(dec_results[1].call, 13, "IU4AND");
+    snprintf(dec_results[1].loc, 7, "JN54KP");
+    snprintf(dec_results[1].pwr, 3, "8");
+
+    // 3
+    dec_results[2].freq = 101387.f;
+    dec_results[2].sync = 0.6f;
+    dec_results[2].snr = -10.0f;
+    dec_results[2].dt = 10.1f;
+    dec_results[2].drift = 2.3f;
+    dec_results[2].jitter = 123;
+    dec_results[2].cycles = 4;
+    
+    snprintf(dec_results[2].message, 23, "Message2");
+    snprintf(dec_results[2].call, 13, "IU4ANE");
+    snprintf(dec_results[2].loc, 7, "JN54KP");
+    snprintf(dec_results[2].pwr, 3, "7");
+
+    return 3;
+}
 
 void printSpots(uint32_t n_results) {
     if (n_results == 0) {
