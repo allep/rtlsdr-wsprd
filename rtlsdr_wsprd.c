@@ -438,7 +438,7 @@ void postSpots(uint32_t n_results) {
     }
 }
 
-unsigned int testFillSpots()
+int32_t testFillSpots()
 {
     // 0
     dec_results[0].freq = 210946.f;
