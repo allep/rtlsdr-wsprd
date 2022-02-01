@@ -1193,6 +1193,9 @@ int main(int argc, char **argv) {
     printf("Wait for time sync (start in %d sec)\n\n", uwait / 1000000);
     printf("              Date  Time(z)    SNR     DT       Freq Dr    Call    Loc Pwr\n");
 
+    int32_t nSpots = testFillSpots();
+    printSpots(nSpots);
+
     /* Prepare a low priority param for the decoder thread */
     struct sched_param param;
     pthread_attr_init(&decState.tattr);
