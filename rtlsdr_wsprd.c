@@ -264,7 +264,9 @@ static void *decoder(void *arg) {
     int32_t n_results = testFillSpots();
 
     while (!rx_state.exit_flag) {
+        printf("Inside loop.");
         sleep(120);
+        printf(" - Waited 120 sec");
         LOG(LOG_DEBUG, "Decoder thread -- Got a signal!\n");
 #if 0
         safe_cond_wait(&decState.ready_cond, &decState.ready_mutex);
