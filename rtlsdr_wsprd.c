@@ -245,7 +245,7 @@ static void rtlsdr_callback(unsigned char *samples, uint32_t samples_count, void
 
 
 static void sigint_callback_handler(int signum) {
-    fprintf(stderr, "Signal caught %d, exiting!\n", signum);
+    // fprintf(stderr, "Signal caught %d, exiting!\n", signum);
     rx_state.exit_flag = true;
     rtlsdr_cancel_async(rtl_device);
 }
